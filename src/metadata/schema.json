@@ -1,0 +1,540 @@
+{
+    "package": "GoogleSlides",
+    "tagline": "GoogleSlides API",
+    "description": "With Google Slides, you can create, edit, collaborate, and present wherever you are. For free.Google Slides makes your ideas shine with a variety of presentation themes, hundreds of fonts, embedded video, animations, and more.Choose from a wide variety of pitches, portfolios and other pre-made presentations \u2014 all designed to make your work that much better, and your life that much easier.Access, create, and edit your presentations wherever you go \u2014 from your phone, tablet, or computer \u2014 even when there\u2019s no connection.",
+    "image": "https:\/\/logo.clearbit.com\/google.com",
+    "repo": "https://github.com/RapidSoftwareSolutions/Marketplace-GoogleSlides-Package",
+    "keywords": [
+        "API",
+        "Slides",
+        "Presentation"
+    ],
+    "accounts": {
+        "domain": "www.google.com",
+        "credentials": [
+            "clientId",
+            "clientSecret"
+        ]
+    },
+    "steps": [
+        "When you create your application, you register it using the Google API Console. Google then provides information you'll need later, such as a client ID and a client secret.",
+        "Activate the Google Slides API in the Google API Console. (If the API isn't listed in the API Console, then skip this step.)",
+        "When your application needs access to user data, it asks Google for a particular scope of access.",
+        "Google displays a consent screen to the user, asking them to authorize your application to request some of their data.",
+        "If the user approves, then Google gives your application a short-lived access token."
+    ],
+    "blocks": [
+        {
+            "name": "getAccessToken",
+            "description": "Get AccessToken.",
+            "args": [
+                {
+                    "name": "clientId",
+                    "type": "credentials",
+                    "info": "Client ID",
+                    "required": true,
+                    "vendorSchema": {
+                        "name": "client_id"
+                    }
+                },
+                {
+                    "name": "clientSecret",
+                    "type": "credentials",
+                    "info": "Client secret",
+                    "required": true,
+                    "vendorSchema": {
+                        "name": "client_secret"
+                    }
+                },
+                {
+                    "name": "code",
+                    "type": "String",
+                    "info": "Code you received from Google after the user granted access",
+                    "required": true,
+                    "vendorSchema": {
+                        "name": "code"
+                    }
+                },
+                {
+                    "name": "redirectUri",
+                    "type": "String",
+                    "info": "The same redirect URL as in received Code step.",
+                    "required": true,
+                    "vendorSchema": {
+                        "name": "redirect_uri"
+                    }
+                }
+            ],
+            "vendorRequest": {
+                "url": "https:\/\/www.googleapis.com\/oauth2\/v4\/token",
+                "method": "post",
+                "requestParameters": [
+                    {
+                        "type": "query",
+                        "parameters": [
+                            "code",
+                            "client_id",
+                            "client_secret",
+                            "redirect_uri"
+                        ]
+                    }
+                ]
+            },
+            "callbacks": [
+                {
+                    "name": "error",
+                    "info": "Error"
+                },
+                {
+                    "name": "success",
+                    "info": "Success"
+                }
+            ]
+        },
+        {
+            "name": "refreshToken",
+            "description": "Get new accessToken by refreshToken.",
+            "args": [
+                {
+                    "name": "clientId",
+                    "type": "credentials",
+                    "info": "Client ID",
+                    "required": true,
+                    "vendorSchema": {
+                        "name": "client_id"
+                    }
+                },
+                {
+                    "name": "clientSecret",
+                    "type": "credentials",
+                    "info": "Client secret",
+                    "required": true,
+                    "vendorSchema": {
+                        "name": "client_secret"
+                    }
+                },
+                {
+                    "name": "refreshToken",
+                    "type": "String",
+                    "info": "A token that you can use to obtain a new access token. Refresh tokens are valid until the user revokes access. Again, this field is only present in this response if you set the access_type parameter to offline in the initial request to Google's authorization server.",
+                    "required": true,
+                    "vendorSchema": {
+                        "name": "refresh_token"
+                    }
+                }
+            ],
+            "vendorRequest": {
+                "url": "https:\/\/www.googleapis.com\/oauth2\/v4\/token",
+                "method": "post",
+                "requestParameters": [
+                    {
+                        "type": "query",
+                        "parameters": [
+                            "client_id",
+                            "client_secret",
+                            "refresh_token"
+                        ]
+                    }
+                ]
+            },
+            "callbacks": [
+                {
+                    "name": "error",
+                    "info": "Error"
+                },
+                {
+                    "name": "success",
+                    "info": "Success"
+                }
+            ]
+        },
+        {
+            "name": "revokeAccessToken",
+            "description": "In some cases a user may wish to revoke access given to an application. A user can revoke access by visiting Account Settings. It is also possible for an application to programmatically revoke the access given to it. Programmatic revocation is important in instances where a user unsubscribes or removes an application. In other words, part of the removal process can include an API request to ensure the permissions granted to the application are removed.",
+            "args": [
+                {
+                    "name": "accessToken",
+                    "type": "String",
+                    "info": "The token can be an access token or a refresh token. If the token is an access token and it has a corresponding refresh token, the refresh token will also be revoked.",
+                    "required": true,
+                    "vendorSchema": {
+                        "name": "token"
+                    }
+                }
+            ],
+            "vendorRequest": {
+                "url": "https:\/\/accounts.google.com\/o\/oauth2\/revoke",
+                "method": "get",
+                "requestParameters": [
+                    {
+                        "type": "query",
+                        "parameters": [
+                            "token"
+                        ]
+                    }
+                ]
+            },
+            "callbacks": [
+                {
+                    "name": "error",
+                    "info": "Error"
+                },
+                {
+                    "name": "success",
+                    "info": "Success"
+                }
+            ]
+        },
+        {
+            "name": "getPresentation",
+            "description": "Gets the latest version of the specified presentation.",
+            "args": [
+                {
+                    "name": "accessToken",
+                    "type": "String",
+                    "info": "Access Token. Use getAccessToken to get it.",
+                    "required": true,
+                    "vendorSchema": {
+                        "name": "access_token"
+                    }
+                },
+                {
+                    "name": "presentationId",
+                    "type": "String",
+                    "info": "The ID of the presentation to retrieve.",
+                    "required": true
+                }
+            ],
+            "vendorRequest": {
+                "url": "https:\/\/slides.googleapis.com\/v1\/presentations\/{$data['presentationId']}",
+                "method": "get",
+                "requestParameters": [
+                    {
+                        "type": "query",
+                        "parameters": [
+                            "access_token"
+                        ]
+                    }
+                ]
+            },
+            "callbacks": [
+                {
+                    "name": "error",
+                    "info": "Error"
+                },
+                {
+                    "name": "success",
+                    "info": "Success"
+                }
+            ]
+        },
+        {
+            "name": "getPresentationPages",
+            "description": "Gets the latest version of the specified page in the presentation.",
+            "args": [
+                {
+                    "name": "accessToken",
+                    "type": "String",
+                    "info": "Access Token. Use getAccessToken to get it.",
+                    "required": true,
+                    "vendorSchema": {
+                        "name": "access_token"
+                    }
+                },
+                {
+                    "name": "presentationId",
+                    "type": "String",
+                    "info": "The ID of the presentation to retrieve.",
+                    "required": true
+                },
+                {
+                    "name": "pageObjectId",
+                    "type": "String",
+                    "info": "The object ID of the page to retrieve.",
+                    "required": true
+                }
+            ],
+            "vendorRequest": {
+                "url": "https:\/\/slides.googleapis.com\/v1\/presentations\/{$data['presentationId']}\/pages\/{$data['pageObjectId']}",
+                "method": "get",
+                "requestParameters": [
+                    {
+                        "type": "query",
+                        "parameters": [
+                            "access_token"
+                        ]
+                    }
+                ]
+            },
+            "callbacks": [
+                {
+                    "name": "error",
+                    "info": "Error"
+                },
+                {
+                    "name": "success",
+                    "info": "Success"
+                }
+            ]
+        },
+        {
+            "name": "createPresentation",
+            "description": "Creates a new presentation using the title given in the request. Other fields in the request are ignored. Returns the created presentation.",
+            "args": [
+                {
+                    "name": "accessToken",
+                    "type": "String",
+                    "info": "Access Token. Use getAccessToken to get it.",
+                    "required": true,
+                    "vendorSchema": {
+                        "name": "access_token"
+                    }
+                },
+                {
+                    "name": "pageSize",
+                    "type": "JSON",
+                    "info": "The size of pages in the presentation.See example in readme.",
+                    "required": false
+                },
+                {
+                    "name": "slides",
+                    "type": "List",
+                    "structure": {
+                        "name": "slidesJsonObject",
+                        "type": "JSON",
+                        "info": "See example in readme."
+                    },
+                    "info": "The slides in the presentation. A slide inherits properties from a slide layout.",
+                    "required": false
+                },
+                {
+                    "name": "title",
+                    "type": "String",
+                    "info": "The title of the presentation.",
+                    "required": false
+                },
+                {
+                    "name": "masters",
+                    "type": "List",
+                    "structure": {
+                        "name": "masterJsonObject",
+                        "type": "JSON",
+                        "info": "See example in readme."
+                    },
+                    "info": "The slide masters in the presentation. A slide master contains all common page elements and the common properties for a set of layouts.",
+                    "required": false
+                },
+                {
+                    "name": "layouts",
+                    "type": "List",
+                    "structure": {
+                        "name": "layoutJsonObject",
+                        "type": "JSON",
+                        "info": "See example in readme."
+                    },
+                    "info": "The layouts in the presentation. A layout is a template that determines how content is arranged and styled on the slides that inherit from that layout.",
+                    "required": false
+                },
+                {
+                    "name": "locale",
+                    "type": "String",
+                    "info": "The locale of the presentation, as an IETF BCP 47 language tag.",
+                    "required": false
+                },
+                {
+                    "name": "revisionId",
+                    "type": "String",
+                    "info": "The revision ID of the presentation. Can be used in update requests to assert that the presentation revision hasn't changed since the last read operation. Only populated if the user has edit access to the presentation.See more in readme.",
+                    "required": false
+                },
+                {
+                    "name": "notesMaster",
+                    "type": "List",
+                    "structure": {
+                        "name": "notesMasterJsonObject",
+                        "type": "JSON",
+                        "info": "See example in readme."
+                    },
+                    "info": "The notes master in the presentation. It serves three purposes: - Placeholder shapes on a notes master contain the default text styles and shape properties of all placeholder shapes on notes pages. - Specifically, a SLIDE_IMAGE placeholder shape contains the slide thumbnail, and a BODY placeholder shape contains the speaker notes. - The notes master page properties define the common page properties inherited by all notes pages. - Any other shapes on the notes master will appear on all notes pages.",
+                    "required": false
+                }
+            ],
+            "vendorRequest": {
+                "url": "https://slides.googleapis.com/v1/presentations",
+                "method": "post",
+                "requestParameters": [
+                    {
+                        "type": "query",
+                        "parameters": [
+                            "access_token"
+                        ]
+                    },
+                    {
+                        "type": "json",
+                        "parameters": [
+                            "notesMaster",
+                            "locale",
+                            "revisionId",
+                            "layouts",
+                            "masters",
+                            "title",
+                            "slides",
+                            "pageSize",
+                            "presentationId"
+                        ]
+                    }
+                ]
+            },
+            "callbacks": [
+                {
+                    "name": "error",
+                    "info": "Error"
+                },
+                {
+                    "name": "success",
+                    "info": "Success"
+                }
+            ]
+        },
+        {
+            "name": "getPagesThumbnails",
+            "description": "Generates a thumbnail of the latest version of the specified page in the presentation and returns a URL to the thumbnail image.",
+            "args": [
+                {
+                    "name": "accessToken",
+                    "type": "String",
+                    "info": "Access Token. Use getAccessToken to get it.",
+                    "required": true,
+                    "vendorSchema": {
+                        "name": "access_token"
+                    }
+                },
+                {
+                    "name": "presentationId",
+                    "type": "String",
+                    "info": "The ID of the presentation to retrieve.",
+                    "required": true
+                },
+                {
+                    "name": "pageObjectId",
+                    "type": "String",
+                    "info": "The object ID of the page to retrieve.",
+                    "required": true
+                },
+                {
+                    "name": "thumbnailPropertiesMimeType",
+                    "type": "String",
+                    "info": "The optional mime type of the thumbnail image.If you don't specify the mime type, the default mime type will be PNG.",
+                    "required": false,
+                    "vendorSchema": {
+                        "name": "thumbnailProperties.mimeType"
+                    }
+                },
+                {
+                    "name": "thumbnailPropertiesThumbnailSize",
+                    "type": "Select",
+                    "options": [
+                        "THUMBNAIL_SIZE_UNSPECIFIED",
+                        "LARGE"
+                    ],
+                    "info": "The predefined thumbnail image sizes.THUMBNAIL_SIZE_UNSPECIFIED - The default thumbnail image size.The unspecified thumbnail size implies that the server chooses the size of the image in a way that might vary in the future.large - The thumbnail image width of 1600px.",
+                    "required": false,
+                    "vendorSchema": {
+                        "name": "thumbnailProperties.thumbnailSize"
+                    }
+                }
+            ],
+            "vendorRequest": {
+                "url": "https:\/\/slides.googleapis.com\/v1\/presentations\/{$data['presentationId']}\/pages\/{$data['pageObjectId']}/thumbnail",
+                "method": "get",
+                "requestParameters": [
+                    {
+                        "type": "query",
+                        "parameters": [
+                            "access_token",
+                            "thumbnailPropertiesThumbnailSize",
+                            "thumbnailPropertiesThumbnailSize"
+                        ]
+                    }
+                ]
+            },
+            "callbacks": [
+                {
+                    "name": "error",
+                    "info": "Error"
+                },
+                {
+                    "name": "success",
+                    "info": "Success"
+                }
+            ]
+        },
+        {
+            "name": "updatePresentation",
+            "description": "Applies one or more updates to the presentation.Each request is validated before being applied. If any request is not valid, then the entire request will fail and nothing will be applied.Some requests have replies to give you some information about how they are applied. Other requests do not need to return information; these each return an empty reply. The order of replies matches that of the requests.See more in readme,",
+            "args": [
+                {
+                    "name": "accessToken",
+                    "type": "String",
+                    "info": "Access Token. Use getAccessToken to get it.",
+                    "required": true,
+                    "vendorSchema": {
+                        "name": "access_token"
+                    }
+                },
+                {
+                    "name": "presentationId",
+                    "type": "String",
+                    "info": "The ID of the presentation to update.",
+                    "required": true
+                },
+                {
+                    "name": "requests",
+                    "type": "List",
+                    "structure": {
+                        "name": "requestObject",
+                        "type": "JSON",
+                        "info": "A single kind of update to apply to a presentation.Union field kind can be only one.See more in readme."
+                    },
+                    "info": "A list of updates to apply to the presentation.",
+                    "required": true
+                },
+                {
+                    "name": "writeControl",
+                    "type": "JSON",
+                    "info": "Provides control over how write requests are executed.",
+                    "required": false
+                }
+            ],
+            "vendorRequest": {
+                "url": "https:\/\/slides.googleapis.com\/v1\/presentations\/{$data['presentationId']}:batchUpdate",
+                "method": "post",
+                "requestParameters": [
+                    {
+                        "type": "query",
+                        "parameters": [
+                            "access_token"
+                        ]
+                    },
+                    {
+                        "type": "json",
+                        "parameters": [
+                            "requests",
+                            "writeControl"
+                        ]
+                    }
+                ]
+            },
+            "callbacks": [
+                {
+                    "name": "error",
+                    "info": "Error"
+                },
+                {
+                    "name": "success",
+                    "info": "Success"
+                }
+            ]
+        }
+    ]
+}
