@@ -291,71 +291,9 @@
                     }
                 },
                 {
-                    "name": "pageSize",
-                    "type": "JSON",
-                    "info": "The size of pages in the presentation.See example in readme.",
-                    "required": false
-                },
-                {
-                    "name": "slides",
-                    "type": "List",
-                    "structure": {
-                        "name": "slidesJsonObject",
-                        "type": "JSON",
-                        "info": "See example in readme."
-                    },
-                    "info": "The slides in the presentation. A slide inherits properties from a slide layout.",
-                    "required": false
-                },
-                {
                     "name": "title",
                     "type": "String",
                     "info": "The title of the presentation.",
-                    "required": false
-                },
-                {
-                    "name": "masters",
-                    "type": "List",
-                    "structure": {
-                        "name": "masterJsonObject",
-                        "type": "JSON",
-                        "info": "See example in readme."
-                    },
-                    "info": "The slide masters in the presentation. A slide master contains all common page elements and the common properties for a set of layouts.",
-                    "required": false
-                },
-                {
-                    "name": "layouts",
-                    "type": "List",
-                    "structure": {
-                        "name": "layoutJsonObject",
-                        "type": "JSON",
-                        "info": "See example in readme."
-                    },
-                    "info": "The layouts in the presentation. A layout is a template that determines how content is arranged and styled on the slides that inherit from that layout.",
-                    "required": false
-                },
-                {
-                    "name": "locale",
-                    "type": "String",
-                    "info": "The locale of the presentation, as an IETF BCP 47 language tag.",
-                    "required": false
-                },
-                {
-                    "name": "revisionId",
-                    "type": "String",
-                    "info": "The revision ID of the presentation. Can be used in update requests to assert that the presentation revision hasn't changed since the last read operation. Only populated if the user has edit access to the presentation.See more in readme.",
-                    "required": false
-                },
-                {
-                    "name": "notesMaster",
-                    "type": "List",
-                    "structure": {
-                        "name": "notesMasterJsonObject",
-                        "type": "JSON",
-                        "info": "See example in readme."
-                    },
-                    "info": "The notes master in the presentation. It serves three purposes: - Placeholder shapes on a notes master contain the default text styles and shape properties of all placeholder shapes on notes pages. - Specifically, a SLIDE_IMAGE placeholder shape contains the slide thumbnail, and a BODY placeholder shape contains the speaker notes. - The notes master page properties define the common page properties inherited by all notes pages. - Any other shapes on the notes master will appear on all notes pages.",
                     "required": false
                 }
             ],
@@ -372,15 +310,7 @@
                     {
                         "type": "json",
                         "parameters": [
-                            "notesMaster",
-                            "locale",
-                            "revisionId",
-                            "layouts",
-                            "masters",
-                            "title",
-                            "slides",
-                            "pageSize",
-                            "presentationId"
+                            "title"
                         ]
                     }
                 ]

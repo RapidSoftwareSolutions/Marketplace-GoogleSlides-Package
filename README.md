@@ -61,17 +61,7 @@ Creates a new presentation using the title given in the request. Other fields in
 | Field      | Type  | Description
 |------------|-------|----------
 | accessToken| String| Access Token. Use getAccessToken to get it.
-| pageSize   | JSON  | The size of pages in the presentation.See more info [here](https://developers.google.com/slides/reference/rest/v1/presentations/create).
-| slides     | List  | The slides in the presentation. A slide inherits properties from a slide layout. See more info [here](https://developers.google.com/slides/reference/rest/v1/presentations.pages#Page)
 | title      | String| The title of the presentation.
-| masters    | List  | The slide masters in the presentation. A slide master contains all common page elements and the common properties for a set of layouts.
-| layouts    | List  | The layouts in the presentation. A layout is a template that determines how content is arranged and styled on the slides that inherit from that layout.
-| locale     | String| The locale of the presentation, as an IETF BCP 47 language tag.
-| revisionId | String| The revision ID of the presentation. Can be used in update requests to assert that the presentation revision hasn't changed since the last read operation. Only populated if the user has edit access to the presentation.The format of the revision ID may change over time, so it should be treated opaquely. A returned revision ID is only guaranteed to be valid for 24 hours after it has been returned and cannot be shared across users. If the revision ID is unchanged between calls, then the presentation has not changed. Conversely, a changed ID (for the same presentation and user) usually means the presentation has been updated; however, a changed ID can also be due to internal factors such as ID format changes.
-| notesMaster| List  | The notes master in the presentation. It serves three purposes: - Placeholder shapes on a notes master contain the default text styles and shape properties of all placeholder shapes on notes pages. - Specifically, a SLIDE_IMAGE placeholder shape contains the slide thumbnail, and a BODY placeholder shape contains the speaker notes. - The notes master page properties define the common page properties inherited by all notes pages. - Any other shapes on the notes master will appear on all notes pages.
-
-
-
 
 ## GoogleSlides.getPagesThumbnails
 Generates a thumbnail of the latest version of the specified page in the presentation and returns a URL to the thumbnail image.
